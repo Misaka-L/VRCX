@@ -31,7 +31,6 @@ import {
 import { processBulk, request } from '../service/request';
 import { AppDebug } from '../service/appConfig';
 import { database } from '../service/database';
-import { formatJsonVars } from '../shared/utils/base/ui';
 import { useAppearanceSettingsStore } from './settings/appearance';
 import { useAuthStore } from './auth';
 import { useAvatarStore } from './avatar';
@@ -183,6 +182,7 @@ export const useUserStore = defineStore('User', () => {
     const userDialog = ref({
         visible: false,
         loading: false,
+        activeTab: 'Info',
         lastActiveTab: 'Info',
         id: '',
         ref: {},
@@ -235,7 +235,6 @@ export const useUserStore = defineStore('User', () => {
         },
         avatarSorting: 'update',
         avatarReleaseStatus: 'all',
-        treeData: {},
         memo: '',
         $avatarInfo: {
             ownerId: '',
@@ -731,8 +730,6 @@ export const useUserStore = defineStore('User', () => {
             } else if (D.ref.friendRequestStatus === 'outgoing') {
                 D.outgoingRequest = true;
             }
-            // refresh user dialog JSON tab
-            refreshUserDialogTreeData();
         }
         if (hasPropChanged) {
             if (
@@ -767,26 +764,13 @@ export const useUserStore = defineStore('User', () => {
         ) {
             return;
         }
-        const hadActiveDialog =
-            userDialog.value.visible ||
-            worldStore.worldDialog.visible ||
-            avatarStore.avatarDialog.visible ||
-            groupStore.groupDialog.visible ||
-            instanceStore.previousInstancesInfoDialog.visible ||
-            instanceStore.previousInstancesUserDialog.visible ||
-            instanceStore.previousInstancesWorldDialog.visible ||
-            instanceStore.previousInstancesGroupDialog.visible;
-        if (!hadActiveDialog) {
-            uiStore.clearDialogCrumbs();
-        }
-        if (!options.skipBreadcrumb) {
-            uiStore.pushDialogCrumb('user', userId);
-        }
-        instanceStore.hidePreviousInstancesDialogs();
-        worldStore.worldDialog.visible = false;
-        avatarStore.avatarDialog.visible = false;
-        groupStore.groupDialog.visible = false;
+        uiStore.openDialog({
+            type: 'user',
+            id: userId,
+            skipBreadcrumb: options.skipBreadcrumb
+        });
         const D = userDialog.value;
+        D.visible = true;
         D.id = userId;
         D.treeData = {};
         D.memo = '';
@@ -1249,18 +1233,6 @@ export const useUserStore = defineStore('User', () => {
                 }
             }
         });
-    }
-
-    function refreshUserDialogTreeData() {
-        const D = userDialog.value;
-        if (D.id === currentUser.value.id) {
-            D.treeData = formatJsonVars({
-                ...currentUser.value,
-                ...D.ref
-            });
-            return;
-        }
-        D.treeData = formatJsonVars(D.ref);
     }
 
     async function lookupUser(ref) {
@@ -2076,7 +2048,6 @@ export const useUserStore = defineStore('User', () => {
         applyUserDialogLocation,
         sortUserDialogAvatars,
         refreshUserDialogAvatars,
-        refreshUserDialogTreeData,
         lookupUser,
         updateAutoStateChange,
         addCustomTag,
