@@ -79,7 +79,7 @@ jobs:
           cp -r $WEB_APP_ARTIFACT_PATH/* $MERGE_WORKSPACE/html/
 
       - name: Upload Merged Artifacts
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v6
         with:
           name: vrcx-app-${{ matrix.artifact-postfix }}
           path: ${{ env.merge_workspace }}
