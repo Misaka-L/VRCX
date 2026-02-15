@@ -44,7 +44,7 @@ jobs:
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SentryAuthToken }}
           BUILD_TASK: ${{ matrix.npm-build-tasks-variant }}
-        run: npm run prod $BUILD_TASK
+        run: npm run $BUILD_TASK
 
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v6
