@@ -27,7 +27,6 @@ jobs:
       ref: ${{ inputs.ref }}
 
   build-dotnet-app:
-    needs: build-web-app
     uses: ./.github/workflows/build-dotnet-app.yml
     with:
       ref: ${{ inputs.ref }}
