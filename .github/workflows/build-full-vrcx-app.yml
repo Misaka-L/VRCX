@@ -9,12 +9,14 @@ on:
         default: ${{ github.ref_name }}
   push:
     paths:
+      - .github/workflows/build-full-app.yml
       - src/**
       - .github/workflows/build-web-app.yml
       - src-dotnet/**
       - .github/workflows/build-dotnet-app.yml
   pull_request:
     paths:
+      - .github/workflows/build-full-app.yml
       - src/**
       - .github/workflows/build-web-app.yml
       - src-dotnet/**
