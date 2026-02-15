@@ -7,14 +7,6 @@ on:
         type: string
         description: git ref to build
         default: ${{ github.ref_name }}
-  push:
-    paths:
-      - src/**
-      - .github/workflows/build-web-app.yml
-  pull_request:
-    paths:
-      - src/**
-      - .github/workflows/build-web-app.yml
 
 jobs:
   build-web-app:

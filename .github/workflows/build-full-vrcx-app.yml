@@ -1,0 +1,33 @@
+name: Build Full App
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        description: git ref to build
+        default: ${{ github.ref_name }}
+  push:
+    paths:
+      - src/**
+      - .github/workflows/build-web-app.yml
+      - src-dotnet/**
+      - .github/workflows/build-dotnet-app.yml
+  pull_request:
+    paths:
+      - src/**
+      - .github/workflows/build-web-app.yml
+      - src-dotnet/**
+      - .github/workflows/build-dotnet-app.yml
+
+jobs:
+  build-web-app:
+    uses: ./.github/workflows/build-web-app.yml
+    with:
+      ref: ${{ inputs.ref }}
+
+  build-dotnet-app:
+    needs: build-web-app
+    uses: ./.github/workflows/build-dotnet-app.yml
+    with:
+      ref: ${{ inputs.ref }}
