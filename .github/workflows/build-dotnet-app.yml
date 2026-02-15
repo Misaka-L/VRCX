@@ -24,9 +24,11 @@ jobs:
                     - os: windows-latest
                       rid: win-x64
                       platform-project-postfix: Windows
+                      framework: net10.0-windows10.0.17763.0
                     - os: ubuntu-latest
                       rid: linux-x64
                       platform-project-postfix: CefDesktop
+                      framework: net10.0
 
         runs-on: ${{ matrix.os }}
 
@@ -53,7 +55,8 @@ jobs:
                   RID: ${{ matrix.rid }}
                   BUILD_OUTPUT_DIR: ${{ env.output_dir }}
                   PATH_TO_TARGET_PROJECT: ${{ env.platform_app_src_dir_prefix }}${{ matrix.platform-project-postfix }}
-              run: dotnet publish -c Release $PATH_TO_TARGET_PROJECT -r $RID -o $BUILD_OUTPUT_DIR
+                  TARGET_FRAMEWORK: ${{ matrix.framework }}
+              run: dotnet publish -c Release $PATH_TO_TARGET_PROJECT -r $RID -o $BUILD_OUTPUT_DIR -f $TARGET_FRAMEWORK
               shell: bash
               working-directory: ${{ env.src_dir }}
 
