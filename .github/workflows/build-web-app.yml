@@ -10,11 +10,11 @@ on:
   push:
     paths:
       - src/**
-      - .github/workflows/core-build.web.yml
+      - .github/workflows/core-build-web.yml
   pull_request:
     paths:
       - src/**
-      - .github/workflows/core-build.web.yml
+      - .github/workflows/core-build-web.yml
 
 jobs:
   build-web-app:
