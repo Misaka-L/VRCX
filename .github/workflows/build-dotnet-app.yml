@@ -33,7 +33,7 @@ jobs:
         env:
             repo_dir: ${{ github.workspace }}/repo
             src_dir: ${{ github.workspace }}/repo/src-dotnet
-            platform_app_src_dir_prefix: ${{ github.workspace }}/repo/src-dotnet/App/VRCX.App.Platform.
+            platform_app_src_dir_prefix: ${{ github.workspace }}/repo/src-dotnet/App/Platform/VRCX.App.Platform.
             output_dir: ${{ github.workspace }}/output
 
         steps:
