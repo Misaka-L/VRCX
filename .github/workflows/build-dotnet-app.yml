@@ -23,17 +23,17 @@ jobs:
                 include:
                     - os: windows-latest
                       rid: win-x64
-                      project: App/Platform/VRCX.App.Platform.Windows
+                      platform-project-postfix: Windows
                     - os: ubuntu-latest
                       rid: linux-x64
-                      project: App/Platform/VRCX.App.Platform.CefDesktop
-                      additional-build-args: "--framework net10.0"
+                      platform-project-postfix: CefDesktop
 
         runs-on: ${{ matrix.os }}
 
         env:
             repo_dir: ${{ github.workspace }}/repo
             src_dir: ${{ github.workspace }}/repo/src-dotnet
+            platform_app_src_dir_prefix: ${{ github.workspace }}/repo/src-dotnet/App/VRCX.App.Platform.
             output_dir: ${{ github.workspace }}/output
 
         steps:
@@ -52,9 +52,8 @@ jobs:
               env:
                   RID: ${{ matrix.rid }}
                   BUILD_OUTPUT_DIR: ${{ env.output_dir }}
-                  PATH_TO_TARGET_PROJECT: ${{ matrix.project }}
-                  ADDITIONAL_BUILD_ARGS: ${{ matrix.additional-build-args }}
-              run: dotnet publish -c Release $PATH_TO_TARGET_PROJECT -r $RID -o $BUILD_OUTPUT_DIR $ADDITIONAL_BUILD_ARGS
+                  PATH_TO_TARGET_PROJECT: ${{ env.platform_app_src_dir_prefix }}${{ matrix.platform-project-postfix }}
+              run: dotnet publish -c Release $PATH_TO_TARGET_PROJECT -r $RID -o $BUILD_OUTPUT_DIR
               shell: bash
               working-directory: ${{ env.src_dir }}
 
