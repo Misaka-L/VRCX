@@ -66,13 +66,6 @@ jobs:
           script-file: ${{ env.nsis_script_path }}
           additional-plugin-paths: ${{ env.nsis_plugins_dir }}
 
-      - name: Create NSIS Installer
-        shell: pwsh
-        working-directory: ${{ env.repo_dir }}
-        env:
-          PATH_TO_NSIS_SCRIPT: ${{ env.nsis_script_path }}
-        run: makensis $Env:PATH_TO_NSIS_SCRIPT
-
       - name: Rename Setup
         shell: bash
         working-directory: ${{ env.repo_dir }}
