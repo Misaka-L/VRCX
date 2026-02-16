@@ -61,7 +61,7 @@ jobs:
         run: choco install nsis -y
 
       - name: Create NSIS installer
-        uses: joncloud/makensis-action@v5
+        uses: joncloud/makensis-action@v5.0
         with:
           script-file: ${{ env.nsis_script_path }}
           additional-plugin-paths: ${{ env.nsis_plugins_dir }}
