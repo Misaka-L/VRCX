@@ -78,4 +78,5 @@ jobs:
     with:
       windows_app_artifact_name: vrcx-app-win-x64
       installer_artifact_name: vrcx-installer-win-x64
+      windows_app_artifact_executable_name: VRCX.App.Platform.Windows.exe
       ref: ${{ inputs.ref }}

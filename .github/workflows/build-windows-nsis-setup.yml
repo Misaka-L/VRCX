@@ -3,6 +3,9 @@ name: Build Windows NSIS Setup
 on:
   workflow_call:
     inputs:
+      windows_app_artifact_executable_name:
+        type: string
+        description: name of the executable inside the Windows app artifact. Will be rename to VRCX.exe
       windows_app_artifact_name:
         type: string
         description: name of the Windows app artifact to package into the installer
@@ -56,6 +59,12 @@ jobs:
         with:
           name: ${{ inputs.windows_app_artifact_name }}
           path: ${{ env.nsis_content_to_package_path }}
+
+      - name: Rename Executable
+        shell: bash
+        working-directory: ${{ env.nsis_content_to_package_path }}
+        run: |
+          mv ${{ inputs.windows_app_artifact_executable_name }} VRCX.exe
 
       - name: Install NSIS
         run: choco install nsis -y
