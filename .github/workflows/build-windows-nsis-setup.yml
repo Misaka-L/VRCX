@@ -66,13 +66,21 @@ jobs:
           script-file: ${{ env.nsis_script_path }}
           additional-plugin-paths: ${{ env.nsis_plugins_dir }}
 
-      - name: Rename Setup
+      - name: Create NSIS Installer
         shell: pwsh
+        working-directory: ${{ env.repo_dir }}
+        env:
+          PATH_TO_NSIS_SCRIPT: ${{ env.nsis_script_path }}
+        run: makensis $Env:PATH_TO_NSIS_SCRIPT
+
+      - name: Rename Setup
+        shell: bash
+        working-directory: ${{ env.repo_dir }}
+        env:
+          FINAL_INSTALLER_PATH: ${{ github.workspace }}/VRCX_${{ env.app_version }}_Setup.exe
         run: |
-          file_name="VRCX_${{ env.app_version }}_Setup.exe"
-          echo "Setup FileName: ${file_name}"
-          mv Installer/VRCX_Setup.exe ${{ github.workspace }}/$file_name
-          echo "path_to_renamed_installer=${{ github.workspace }}/${file_name}" >> $GITHUB_ENV
+          mv Installer/VRCX_Setup.exe $FINAL_INSTALLER_PATH
+          echo path_to_renamed_installer=$FINAL_INSTALLER_PATH >> $GITHUB_ENV
 
       - name: Upload Installer Artifact
         uses: actions/upload-artifact@v6
