@@ -8,19 +8,7 @@ on:
         description: git ref to build
         default: ${{ github.ref_name }}
   push:
-    paths:
-      - .github/workflows/build-full-app.yml
-      - src/**
-      - .github/workflows/build-web-app.yml
-      - src-dotnet/**
-      - .github/workflows/build-dotnet-app.yml
   pull_request:
-    paths:
-      - .github/workflows/build-full-app.yml
-      - src/**
-      - .github/workflows/build-web-app.yml
-      - src-dotnet/**
-      - .github/workflows/build-dotnet-app.yml
 
 jobs:
   build-web-app:
@@ -83,3 +71,11 @@ jobs:
         with:
           name: vrcx-app-${{ matrix.artifact-postfix }}
           path: ${{ env.merge_workspace }}
+
+  build-windows-nsis-setup:
+    needs: [merge-build-artifacts]
+    uses: ./.github/workflows/build-windows-nsis-setup.yml
+    with:
+      windows_app_artifact_name: vrcx-app-win-x64
+      installer_artifact_name: vrcx-installer-win-x64
+      ref: ${{ inputs.ref }}

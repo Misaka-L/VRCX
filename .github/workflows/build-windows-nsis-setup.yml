@@ -1,0 +1,81 @@
+name: Build Windows NSIS Setup
+
+on:
+  workflow_call:
+    inputs:
+      windows_app_artifact_name:
+        type: string
+        description: name of the Windows app artifact to package into the installer
+      installer_artifact_name:
+        type: string
+        description: name of the installer artifact to upload
+      ref:
+        type: string
+        description: git ref to build
+        default: ${{ github.ref_name }}
+
+jobs:
+  build-windows-nsis-setup:
+    runs-on: windows-latest
+
+    env:
+      repo_dir: ${{ github.workspace }}/repo
+      output_dir: ${{ github.workspace }}/output
+      nsis_script_path: ${{ github.workspace }}/repo/Installer/installer.nsi
+      nsis_plugins_dir: ${{ github.workspace }}/repo/Installer/Plugins
+      nsis_content_to_package_path: ${{ github.workspace }}/repo/build/Cef # hard-code in nsis script. NSIS is one of the worst tools I've ever used.
+      nsis_installer_output_path: ${{ github.workspace }}/repo/Installer/VRCX_Setup.exe # also hard-code in NSIS script
+      path_to_renamed_installer: "" # placeholder set in Rename setup step
+      app_version: "" # placeholder set in Get Version and Date step
+      app_date: "" # placeholder
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+          path: ${{ env.repo_dir }}
+
+      - name: Get Version and Date
+        shell: bash
+        working-directory: ${{ env.repo_dir }}
+        run: |
+          export FILENAME="$(cat Version)"
+          export DATE="$(cat Version)"
+          echo "app_version=${FILENAME}" >> $GITHUB_ENV
+          echo "app_date=${DATE}" >> $GITHUB_ENV
+
+      - name: Set version
+        shell: bash
+        working-directory: ${{ env.repo_dir }}
+        run: |
+          echo "!define PRODUCT_VERSION_FROM_FILE \"${{ env.app_date }}.0\"" > Installer/version_define.nsh
+
+      - name: Download Build Artifacts
+        uses: actions/download-artifact@v7
+        with:
+          name: ${{ inputs.windows_app_artifact_name }}
+          path: ${{ env.nsis_content_to_package_path }}
+
+      - name: Install NSIS
+        run: choco install nsis -y
+
+      - name: Create NSIS installer
+        uses: joncloud/makensis-action@v5
+        with:
+          script-file: ${{ env.nsis_script_path }}
+          additional-plugin-paths: ${{ env.nsis_plugins_dir }}
+
+      - name: Rename Setup
+        shell: pwsh
+        run: |
+          file_name="VRCX_${{ env.app_version }}_Setup.exe"
+          echo "Setup FileName: ${file_name}"
+          mv Installer/VRCX_Setup.exe ${{ github.workspace }}/$file_name
+          echo "path_to_renamed_installer=${{ github.workspace }}/${file_name}" >> $GITHUB_ENV
+
+      - name: Upload Installer Artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: ${{ inputs.installer_artifact_name }}
+          path: ${{ env.path_to_renamed_installer }}
