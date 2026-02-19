@@ -7,7 +7,6 @@ using VRCX.App.Services;
 using VRCX.App.Views;
 using VRCX.App.WebView;
 using VRCX.App.WebViewInterop;
-using VRCX.Core;
 using VRCX.Core.Services.Platform;
 using VRCX.Core.Shared;
 
@@ -15,6 +14,7 @@ namespace VRCX.App.ViewModels;
 
 public sealed class BootstrapWindowViewModel(
     MainWindowViewModel mainWindowViewModel,
+    OverlayDebugWindowViewModel overlayDebugWindowViewModel,
     NativeMessageBoxService nativeMessageBoxService,
     NotifyWebLoadedService notifyWebLoadedService,
     MainWebViewService mainWebViewService,
@@ -90,6 +90,13 @@ public sealed class BootstrapWindowViewModel(
 
             mainWindow.Show();
             mainWindow.Activate();
+
+            var overlayDebugWindow = new OverlayDebugWindow
+            {
+                DataContext = overlayDebugWindowViewModel
+            };
+            
+            overlayDebugWindow.Show();
         }
         catch (Exception ex)
         {
@@ -119,11 +126,13 @@ public sealed class BootstrapWindowViewModelFactory(
     NativeMessageBoxService nativeMessageBoxService,
     NotifyWebLoadedService notifyWebLoadedService,
     MainWebViewService mainWebViewService,
-    WebViewJsonIpcService webViewJsonIpcService
+    WebViewJsonIpcService webViewJsonIpcService,
+    OverlayDebugWindowViewModel overlayDebugWindowViewModel
 )
 {
     public BootstrapWindowViewModel Create(BootstrapDelegate bootstrapDelegate) =>
         new(mainWindowViewModel,
+            overlayDebugWindowViewModel,
             nativeMessageBoxService,
             notifyWebLoadedService,
             mainWebViewService,

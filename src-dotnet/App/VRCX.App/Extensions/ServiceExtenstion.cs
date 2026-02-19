@@ -20,6 +20,7 @@ public static class ServiceExtenstion
 
             services.AddSingleton<WebViewJsonIpcService>();
             services.AddSingleton<MainWebViewService>();
+            services.AddSingleton<OverlayDebugWindowViewModel>();
             services.AddSingleton<AppWindowService>();
             services.AddTransient<ClipboardService>();
             services.AddSingleton<NativeMessageBoxService>();
