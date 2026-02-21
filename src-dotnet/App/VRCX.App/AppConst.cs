@@ -6,6 +6,7 @@ public static class AppConst
     public const string AppFileHost = "app";
     public const string LocalFileAccessHost = "local-files";
 
+    public const string AppUri = $"{AppScheme}://{AppFileHost}/index.html";
     public const string LocalDevelopmentServerUri = "http://localhost:9000";
 
     // https://learn.microsoft.com/en-us/microsoft-edge/webview2/reference/winrt/microsoft_web_webview2_core/corewebview2customschemeregistration?view=webview2-winrt-1.0.3595.46#hasauthoritycomponent
