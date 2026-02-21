@@ -32,11 +32,13 @@ public partial class AppApi
             if (index > 0)
             {
                 metadata.Add("previousFilePath", files[index - 1]);
+                metadata.Add("previousUri", webLocalFileAccessService.GetEncryptedUri(files[index - 1]).ToString());
             }
 
             if (index < files.Length - 1)
             {
                 metadata.Add("nextFilePath", files[index + 1]);
+                metadata.Add("nextUri", webLocalFileAccessService.GetEncryptedUri(files[index + 1]).ToString());
             }
         }
 
@@ -66,8 +68,26 @@ public partial class AppApi
         try
         {
             var metadata = screenshotMetadataService.GetScreenshotMetadata(path);
+            var uri = webLocalFileAccessService.GetEncryptedUri(path);
 
-            return JsonSerializer.Serialize(metadata, AppApiScreenshotJsonContext.Default.ScreenshotMetadata);
+            var metadataWithUri = new ScreenshotMetadataWithUri
+            {
+                Uri = uri.ToString(),
+                Application = metadata.Application,
+                Author = metadata.Author,
+                Note = metadata.Note,
+                Players = metadata.Players,
+                Pos = metadata.Pos,
+                SourceFile = metadata.SourceFile,
+                Timestamp = metadata.Timestamp,
+                Version = metadata.Version,
+                World = metadata.World
+            };
+
+            return JsonSerializer.Serialize(
+                metadataWithUri,
+                AppApiScreenshotJsonContext.Default.ScreenshotMetadataWithUri
+            );
         }
         catch (Exception ex)
         {

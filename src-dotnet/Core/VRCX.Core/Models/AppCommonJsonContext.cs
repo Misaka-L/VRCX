@@ -10,5 +10,6 @@ internal sealed partial class AppCommonJsonContext : JsonSerializerContext;
 
 [JsonSerializable(typeof(ScreenshotMetadata))]
 [JsonSerializable(typeof(GetScreenshotMetadataError))]
+[JsonSerializable(typeof(ScreenshotMetadataWithUri))]
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase)]
 internal sealed partial class AppApiScreenshotJsonContext : JsonSerializerContext;

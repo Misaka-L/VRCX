@@ -9,9 +9,12 @@ public sealed class WindowsWebViewControl : PlatformWebViewControl
 {
     private readonly WindowsWebViewControlCore _webViewControlCore;
 
-    public WindowsWebViewControl(ComObject<ICoreWebView2Environment15> webView2Environment)
+    public WindowsWebViewControl(
+        ComObject<ICoreWebView2Environment15> webView2Environment,
+        OnVirtualHostRequest onVirtualHostRequest
+    )
     {
-        _webViewControlCore = new WindowsWebViewControlCore(webView2Environment);
+        _webViewControlCore = new WindowsWebViewControlCore(webView2Environment, onVirtualHostRequest);
 
         Content = _webViewControlCore;
     }

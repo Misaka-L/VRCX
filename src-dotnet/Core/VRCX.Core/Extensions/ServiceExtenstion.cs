@@ -6,6 +6,7 @@ using VRCX.Core.ScreenshotManagement.Extensions;
 using VRCX.Core.Services;
 using VRCX.Core.Services.AppUpdate;
 using VRCX.Core.Services.Ipc;
+using VRCX.Core.WebLocalFileAccess.Extensions;
 using WebApiService = VRCX.Core.Services.WebApi.WebApiService;
 
 namespace VRCX.Core.Extensions;
@@ -17,6 +18,7 @@ public static class ServiceExtenstion
         public IServiceCollection AddCoreServices()
         {
             services.AddScreenshotManagement();
+            services.AddWebLocalFileAccess();
 
             services.AddXsOverlayClient();
             services.AddOvrToolkitClient();

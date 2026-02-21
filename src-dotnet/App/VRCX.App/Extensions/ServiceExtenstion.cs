@@ -5,6 +5,7 @@ using VRCX.App.Services;
 using VRCX.App.ViewModels;
 using VRCX.Core.Extensions;
 using VRCX.Core.Services.Platform;
+using VRCX.Core.WebLocalFileAccess.Services.Abstraction;
 
 namespace VRCX.App.Extensions;
 
@@ -36,6 +37,8 @@ public static class ServiceExtenstion
             services.AddTransient<IPlatformLauncherService, LauncherService>();
             services.AddSingleton<IFileDialogService, FileDialogService>();
             services.AddTransient<IOverlayLauncherService, MockOverlayLauncherService>();
+
+            services.AddSingleton<IWebLocalFileUriProvider, AppWebLocalFileUriProvider>();
 
             services.AddViewModels();
 

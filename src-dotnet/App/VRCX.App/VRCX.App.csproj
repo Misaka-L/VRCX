@@ -10,7 +10,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Avalonia" Version=""/>
+        <PackageReference Include="MimeTypeCore"/>
+
+        <PackageReference Include="Avalonia"/>
         <PackageReference Include="Avalonia.Themes.Fluent"/>
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Include="Avalonia.Diagnostics">
@@ -20,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\Core\VRCX.Core\VRCX.Core.csproj" />
+        <ProjectReference Include="..\..\Core\VRCX.Core\VRCX.Core.csproj"/>
     </ItemGroup>
 
 </Project>

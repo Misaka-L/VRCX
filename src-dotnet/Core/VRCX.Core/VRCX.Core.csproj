@@ -37,6 +37,7 @@
         <ProjectReference Include="..\OverlayClient\VRCX.Core.OverlayClient.OvrToolkit\VRCX.Core.OverlayClient.OvrToolkit.csproj"/>
         <ProjectReference Include="..\VRCX.Core.DiscordRpc\VRCX.Core.DiscordRpc.csproj" />
         <ProjectReference Include="..\VRCX.Core.ScreenshotManagement\VRCX.Core.ScreenshotManagement.csproj" />
+        <ProjectReference Include="..\VRCX.Core.WebLocalFileAccess\VRCX.Core.WebLocalFileAccess.csproj" />
         <ProjectReference Include="..\VRCX.Core.Shared\VRCX.Core.Shared.csproj" />
     </ItemGroup>
 

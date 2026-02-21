@@ -107,7 +107,10 @@
                         <CarouselItem>
                             <div class="h-150 w-full">
                                 <img
-                                    :src="screenshotMetadataDialog.metadata.previousFilePath"
+                                    :src="
+                                        screenshotMetadataDialog.metadata.previousUri ??
+                                        screenshotMetadataDialog.metadata.previousFilePath
+                                    "
                                     style="width: 100%; height: 100%; object-fit: contain" />
                             </div>
                         </CarouselItem>
@@ -115,15 +118,26 @@
                             <div class="h-150 w-full">
                                 <img
                                     class="cursor-pointer"
-                                    :src="screenshotMetadataDialog.metadata.filePath"
+                                    :src="
+                                        screenshotMetadataDialog.metadata.uri ??
+                                        screenshotMetadataDialog.metadata.filePath
+                                    "
                                     style="width: 100%; height: 100%; object-fit: contain"
-                                    @click="showFullscreenImageDialog(screenshotMetadataDialog.metadata.filePath)" />
+                                    @click="
+                                        showFullscreenImageDialog(
+                                            screenshotMetadataDialog.metadata.uri ??
+                                                screenshotMetadataDialog.metadata.filePath
+                                        )
+                                    " />
                             </div>
                         </CarouselItem>
                         <CarouselItem>
                             <div class="h-150 w-full">
                                 <img
-                                    :src="screenshotMetadataDialog.metadata.nextFilePath"
+                                    :src="
+                                        screenshotMetadataDialog.metadata.nextUri ??
+                                        screenshotMetadataDialog.metadata.nextFilePath
+                                    "
                                     style="width: 100%; height: 100%; object-fit: contain" />
                             </div>
                         </CarouselItem>

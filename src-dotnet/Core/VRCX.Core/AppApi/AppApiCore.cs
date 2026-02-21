@@ -8,6 +8,7 @@ using VRCX.Core.Services.AppUpdate;
 using VRCX.Core.Services.Ipc;
 using VRCX.Core.Services.Platform;
 using VRCX.Core.Shared;
+using VRCX.Core.WebLocalFileAccess.Services;
 
 namespace VRCX.Core.AppApi;
 
@@ -58,11 +59,12 @@ public partial class AppApiCore : WebViewInterop.App.AppApi
         IpcServerService ipcServerService,
         XsOverlayClientService xsOverlayClientService,
         OvrToolkitClientService ovrToolkitClientService,
-        ScreenshotMetadataService screenshotMetadataService) :
+        ScreenshotMetadataService screenshotMetadataService,
+        WebLocalFileAccessService webLocalFileAccessService) :
         base(
             appLaunchService, logWatcherService, imageCacheService, appUpdateService,
             platformLauncherService, notifyWebLoadedService, ipcServerService, xsOverlayClientService,
-            ovrToolkitClientService, screenshotMetadataService
+            ovrToolkitClientService, screenshotMetadataService, webLocalFileAccessService
         )
     {
         _appLaunchService = appLaunchService;

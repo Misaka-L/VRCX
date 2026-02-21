@@ -14,6 +14,7 @@
     <Project Path="Core/VRCX.Core.DiscordRpc/VRCX.Core.DiscordRpc.csproj" />
     <Project Path="Core/VRCX.Core.ScreenshotManagement/VRCX.Core.ScreenshotManagement.csproj" />
     <Project Path="Core/VRCX.Core.Shared/VRCX.Core.Shared.csproj" />
+    <Project Path="Core/VRCX.Core.WebLocalFileAccess/VRCX.Core.WebLocalFileAccess.csproj" />
     <Project Path="Core/VRCX.Core/VRCX.Core.csproj" />
   </Folder>
   <Folder Name="/Core/OverlayClient/">

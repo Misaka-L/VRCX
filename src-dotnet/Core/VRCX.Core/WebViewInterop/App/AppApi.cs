@@ -12,6 +12,7 @@ using VRCX.Core.Services.AppUpdate;
 using VRCX.Core.Services.Ipc;
 using VRCX.Core.Services.Platform;
 using VRCX.Core.Shared;
+using VRCX.Core.WebLocalFileAccess.Services;
 
 namespace VRCX.Core.WebViewInterop.App
 {
@@ -25,7 +26,8 @@ namespace VRCX.Core.WebViewInterop.App
         IpcServerService ipcServerService,
         XsOverlayClientService xsOverlayClientService,
         OvrToolkitClientService ovrToolkitClientService,
-        ScreenshotMetadataService screenshotMetadataService)
+        ScreenshotMetadataService screenshotMetadataService,
+        WebLocalFileAccessService webLocalFileAccessService)
     {
         private static readonly ILogger Logger = Log.ForContext<AppApi>();
 

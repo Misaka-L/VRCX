@@ -9,13 +9,16 @@ using DirectN.Extensions.Com;
 using DirectN.Extensions.Utilities;
 using Serilog;
 using VRCX.App.WebView;
+using VRCX.App.WebView.VirtualHost;
 using WebView2;
 using WebView2.Utilities;
 
 namespace VRCX.App.Platform.Windows.WebView;
 
-internal sealed class WindowsWebViewControlCore(ComObject<ICoreWebView2Environment15> webView2Environment)
-    : NativeControlHost
+internal sealed class WindowsWebViewControlCore(
+    ComObject<ICoreWebView2Environment15> webView2Environment,
+    OnVirtualHostRequest onVirtualHostRequest
+) : NativeControlHost
 {
     private readonly ILogger _logger = Log.ForContext<WindowsWebViewControlCore>();
 
@@ -78,7 +81,7 @@ internal sealed class WindowsWebViewControlCore(ComObject<ICoreWebView2Environme
             out var coreWebView2Com).ThrowOnError();
 
         var coreWebView2 = new ComObject<ICoreWebView2_28>(coreWebView2Com);
-        coreWebView2.Object.AddWebResourceRequestedFilter(PWSTR.From("https://vrcx/*"),
+        coreWebView2.Object.AddWebResourceRequestedFilter(PWSTR.From($"{AppConst.AppScheme}://*"),
             COREWEBVIEW2_WEB_RESOURCE_CONTEXT.COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL).ThrowOnError();
 
         var token = new EventRegistrationToken();
@@ -88,6 +91,7 @@ internal sealed class WindowsWebViewControlCore(ComObject<ICoreWebView2Environme
             try
             {
                 args.get_Request(out var request).ThrowOnError();
+
                 request.get_Uri(out var uriPtr).ThrowOnError();
                 if (uriPtr.ToStringAndDispose() is not { } uriString)
                 {
@@ -96,76 +100,61 @@ internal sealed class WindowsWebViewControlCore(ComObject<ICoreWebView2Environme
                 }
 
                 uri = new Uri(uriString);
-                var assetsFilePath = uri.LocalPath;
 
-                if (uri.Host != "vrcx") return;
-
-                var filePath = Path.Join(AppContext.BaseDirectory, "html", assetsFilePath);
-                if (!File.Exists(filePath))
+                request.get_Method(out var methodPtr).ThrowOnError();
+                if (methodPtr.ToStringAndDispose() is not { } method)
                 {
-                    _logger.Error("Requested web asset not found: {AssetPath}", assetsFilePath);
-
-                    webView2Environment.Object.CreateWebResourceResponse(
-                        null,
-                        404
-                        , PWSTR.From("Not found"),
-                        PWSTR.From(""),
-                        out var response
-                    );
-
-                    args.put_Response(response);
-                    return;
+                    Debug.Fail("Failed to get method from request.");
+                    throw new Exception("ICoreWebView2WebResourceRequest.get_Method returned null string");
                 }
 
-                try
+                request.get_Headers(out var headers).ThrowOnError();
+                headers.GetIterator(out var headersIterator).ThrowOnError();
+
+                var hasNextHeader = BOOL.Null;
+
+                var headersDictionary = new Dictionary<string, string>();
+                headersIterator.MoveNext(ref hasNextHeader).ThrowOnError();
+                while (hasNextHeader == BOOL.TRUE)
                 {
-                    var fileStream = File.OpenRead(Path.Join(AppContext.BaseDirectory, "html", assetsFilePath));
-                    var responseStream = new BurnAfterReadStream(fileStream);
-                    string headers = "";
-                    if (assetsFilePath.EndsWith(".html"))
+                    if (headersIterator.GetCurrentHeader(out var namePtr, out var valuePtr).GetException() is { } ex)
                     {
-                        headers = "Content-Type: text/html";
-                    }
-                    else if (assetsFilePath.EndsWith(".jpg"))
-                    {
-                        headers = "Content-Type: image/jpeg";
-                    }
-                    else if (assetsFilePath.EndsWith(".png"))
-                    {
-                        headers = "Content-Type: image/png";
-                    }
-                    else if (assetsFilePath.EndsWith(".css"))
-                    {
-                        headers = "Content-Type: text/css";
-                    }
-                    else if (assetsFilePath.EndsWith(".js"))
-                    {
-                        headers = "Content-Type: application/javascript";
+                        Debug.Fail("Failed to get header from request.", ex.ToString());
+                        _logger.Error(ex, "Failed to get header from request.");
+                        break;
                     }
 
-                    webView2Environment.Object.CreateWebResourceResponse(
-                        new ManagedIStream(responseStream),
-                        200
-                        , PWSTR.From("OK"),
-                        PWSTR.From(headers),
-                        out var response
-                    );
+                    var name = namePtr.ToStringAndDispose() ?? throw new Exception(
+                        "ICoreWebView2HttpRequestHeadersIterator.GetCurrentHeader returned null string for header name");
+                    var value = valuePtr.ToStringAndDispose() ?? throw new Exception(
+                        "ICoreWebView2HttpRequestHeadersIterator.GetCurrentHeader returned null string for header value");
 
-                    args.put_Response(response);
+                    headersDictionary.Add(name, value);
+                    headersIterator.MoveNext(ref hasNextHeader).ThrowOnError();
                 }
-                catch (Exception ex)
+
+                var virtualRequest = new VirtualHostRequest
                 {
-                    _logger.Error(ex, "Error serving web asset: {AssetPath}", assetsFilePath);
-                    webView2Environment.Object.CreateWebResourceResponse(
-                        null,
-                        500
-                        , PWSTR.From("Internal Server Error"),
-                        PWSTR.From(""),
-                        out var response
-                    );
+                    Uri = uri,
+                    Method = method,
+                    Headers = headersDictionary.AsReadOnly()
+                };
 
-                    args.put_Response(response);
-                }
+                var virtualResponse = onVirtualHostRequest(virtualRequest);
+
+                webView2Environment.Object.CreateWebResourceResponse(
+                    new ManagedIStream(new BurnAfterReadStream(virtualResponse.ContentStream)),
+                    virtualResponse.StatusCode
+                    , PWSTR.From(virtualResponse.StatusText),
+                    PWSTR.From(
+                        virtualResponse.Headers
+                            .Select(header => $"{header.Key}: {header.Value}")
+                            .Aggregate((a, b) => $"{a}\r\n{b}")
+                    ),
+                    out var response
+                ).ThrowOnError();
+
+                args.put_Response(response);
             }
             catch (Exception ex)
             {
