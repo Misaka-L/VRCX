@@ -12,8 +12,8 @@ public static class LogManagerExtenstion
     {
         var logPath = Path.Join(AppPathService.AppDataDirectory, "logs");
 
-        var jsonLogPath = Path.Combine(logPath, appType, $"vrcx-log-{appType}.json");
-        var plainTextLogPath = Path.Combine(logPath, appType, $"vrcx-log-{appType}.log");
+        var jsonLogPath = Path.Combine(logPath, appType, $"vrcx-log-{appType}-.json");
+        var plainTextLogPath = Path.Combine(logPath, appType, $"vrcx-log-{appType}-.log");
 
         var builder = new LoggerConfiguration();
         if (verbose)
