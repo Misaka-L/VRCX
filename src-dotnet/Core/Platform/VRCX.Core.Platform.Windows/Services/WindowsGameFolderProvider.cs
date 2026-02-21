@@ -19,7 +19,7 @@ public class WindowsGameFolderProvider : IGameFolderProvider
             var json = ReadConfigFile();
             if (string.IsNullOrEmpty(json))
             {
-                _logger.Debug("VRChat config file is empty or missing, using default photos path");
+                _logger.Verbose("VRChat config file is empty or missing, using default photos path");
                 return defaultPath;
             }
 
@@ -32,7 +32,7 @@ public class WindowsGameFolderProvider : IGameFolderProvider
 
             if (jsonObject["cache_directory"] is not { } cacheDirectoryKey)
             {
-                _logger.Debug("cache_directory key not found in VRChat config file, using default path");
+                _logger.Verbose("cache_directory key not found in VRChat config file, using default path");
                 return defaultPath;
             }
 
@@ -71,7 +71,7 @@ public class WindowsGameFolderProvider : IGameFolderProvider
             var json = ReadConfigFile();
             if (string.IsNullOrEmpty(json))
             {
-                _logger.Debug("VRChat config file is empty or missing, using default photos path");
+                _logger.Verbose("VRChat config file is empty or missing, using default photos path");
                 return defaultPath;
             }
 
@@ -84,7 +84,7 @@ public class WindowsGameFolderProvider : IGameFolderProvider
 
             if (obj["picture_output_folder"] is not { } pictureOutputFolderKey)
             {
-                _logger.Debug("picture_output_folder key not found in VRChat config file, using default path");
+                _logger.Verbose("picture_output_folder key not found in VRChat config file, using default path");
                 return defaultPath;
             }
 
