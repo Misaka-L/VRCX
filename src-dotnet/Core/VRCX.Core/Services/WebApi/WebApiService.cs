@@ -25,7 +25,7 @@ public sealed partial class WebApiService : IDisposable
         _httpClient = new HttpClient(
             new WebApiHttpHandler(OnAfterHttpResponse)
             {
-                InnerHandler = new SocketsHttpHandler
+                InnerHandler = new ResilienceHttpHandler(new SocketsHttpHandler
                 {
                     CookieContainer = _cookieContainer,
                     UseCookies = true,
@@ -33,10 +33,13 @@ public sealed partial class WebApiService : IDisposable
                     PooledConnectionLifetime = TimeSpan.FromMinutes(5),
                     MaxConnectionsPerServer = 10,
                     Proxy = appWebProxy,
-                    UseProxy = true
-                }
+                    UseProxy = true,
+                    ConnectTimeout = TimeSpan.FromSeconds(5)
+                })
             });
 
+        // Handle by Polly
+        _httpClient.Timeout = Timeout.InfiniteTimeSpan;
         _httpClient.DefaultRequestHeaders.Add("User-Agent", AppBuildInfoService.Version);
     }
 

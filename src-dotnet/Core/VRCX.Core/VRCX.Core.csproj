@@ -11,6 +11,7 @@
         <PackageReference Include="SixLabors.ImageSharp"/>
         <PackageReference Include="SixLabors.ImageSharp.Drawing"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection"/>
+        <PackageReference Include="Polly.Core"/>
 
         <!--Serilog Logging-->
         <PackageReference Include="Serilog"/>
