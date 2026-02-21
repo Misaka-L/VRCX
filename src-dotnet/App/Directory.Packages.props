@@ -8,12 +8,12 @@
         <!-- Important: keep version in sync! -->
         <PackageVersion Include="Avalonia" Version="12.0.0-preview1"/>
         <PackageVersion Include="Avalonia.Themes.Fluent" Version="12.0.0-preview1"/>
-        <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.11"/>
+        <PackageVersion Include="Avalonia.Diagnostics" Version="11.3.12"/>
         <PackageVersion Include="Avalonia.Desktop" Version="12.0.0-preview1"/>
         <PackageVersion Include="HotAvalonia" Version="3.1.0"/>
 
         <PackageVersion Include="MimeTypeCore" Version="2.0.4"/>
-        <PackageVersion Include="Microsoft.Web.WebView2" Version="1.0.3719.77"/>
+        <PackageVersion Include="Microsoft.Web.WebView2" Version="1.0.3800.47"/>
         <PackageVersion Include="ElectronNET.Core" Version="0.4.0"/>
         <PackageVersion Include="CefGlue.Avalonia" Version="120.6099.211"/>
 
