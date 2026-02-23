@@ -33,6 +33,7 @@ import { useFavoriteStore } from './favorite';
 import { useFriendStore } from './friend';
 import { useGameStore } from './game';
 import { useGeneralSettingsStore } from './settings/general';
+import { useGroupStore } from './group';
 import { useInstanceStore } from './instance';
 import { useLocationStore } from './location';
 import { useModalStore } from './modal';
@@ -62,6 +63,7 @@ export const useNotificationStore = defineStore('Notification', () => {
     const instanceStore = useInstanceStore();
     const modalStore = useModalStore();
     const connectProtocolStore = useConnectProtocolStore();
+    const groupStore = useGroupStore();
 
     const notificationInitStatus = ref(false);
     const notificationTable = ref({
@@ -122,6 +124,47 @@ export const useNotificationStore = defineStore('Notification', () => {
     const otherNotifications = computed(() =>
         notificationTable.value.data.filter(
             (n) => getNotificationCategory(n.type) === 'other'
+        )
+    );
+    const unseenSet = computed(() => new Set(unseenNotifications.value));
+    const unseenFriendNotifications = computed(() =>
+        friendNotifications.value.filter((n) => unseenSet.value.has(n.id))
+    );
+    const unseenGroupNotifications = computed(() =>
+        groupNotifications.value.filter((n) => unseenSet.value.has(n.id))
+    );
+    const unseenOtherNotifications = computed(() =>
+        otherNotifications.value.filter((n) => unseenSet.value.has(n.id))
+    );
+    const recentCutoff = computed(() => dayjs().subtract(24, 'hour').valueOf());
+    function getNotificationTs(n) {
+        const raw = n.created_at ?? n.createdAt;
+        if (typeof raw === 'number') return raw > 1e12 ? raw : raw * 1000;
+        const ts = dayjs(raw).valueOf();
+        return Number.isFinite(ts) ? ts : 0;
+    }
+    const recentFriendNotifications = computed(() =>
+        friendNotifications.value.filter(
+            (n) =>
+                !unseenSet.value.has(n.id) &&
+                n.seen !== false &&
+                getNotificationTs(n) > recentCutoff.value
+        )
+    );
+    const recentGroupNotifications = computed(() =>
+        groupNotifications.value.filter(
+            (n) =>
+                !unseenSet.value.has(n.id) &&
+                n.seen !== false &&
+                getNotificationTs(n) > recentCutoff.value
+        )
+    );
+    const recentOtherNotifications = computed(() =>
+        otherNotifications.value.filter(
+            (n) =>
+                !unseenSet.value.has(n.id) &&
+                n.seen !== false &&
+                getNotificationTs(n) > recentCutoff.value
         )
     );
     const hasUnseenNotifications = computed(
@@ -359,7 +402,7 @@ export const useNotificationStore = defineStore('Notification', () => {
         if (ref) {
             ref.seen = true;
         }
-        database.seenNotificationV2(ref);
+        database.seenNotificationV2(notificationId);
     }
 
     function handleNotificationAccept(args) {
@@ -481,6 +524,12 @@ export const useNotificationStore = defineStore('Notification', () => {
                 delete json[key];
             }
         }
+        if (json.message) {
+            json.message = replaceBioSymbols(json.message);
+        }
+        if (json.title) {
+            json.title = replaceBioSymbols(json.title);
+        }
         let ref = notificationTable.value.data.find((n) => n.id === json.id);
         if (typeof ref === 'undefined') {
             ref = {
@@ -495,8 +544,11 @@ export const useNotificationStore = defineStore('Notification', () => {
                 title: '',
                 imageUrl: '',
                 seen: false,
+                senderUserId: '',
+                senderUsername: '',
                 data: {},
                 responses: [],
+                details: {},
                 version: 2,
                 ...json
             };
@@ -2606,6 +2658,7 @@ export const useNotificationStore = defineStore('Notification', () => {
     function deleteNotificationLogPrompt(row) {
         modalStore
             .confirm({
+                // TODO: type translation
                 description: t('confirm.delete_type', { type: row.type }),
                 title: t('confirm.title')
             })
@@ -2696,6 +2749,12 @@ export const useNotificationStore = defineStore('Notification', () => {
         friendNotifications,
         groupNotifications,
         otherNotifications,
+        unseenFriendNotifications,
+        unseenGroupNotifications,
+        unseenOtherNotifications,
+        recentFriendNotifications,
+        recentGroupNotifications,
+        recentOtherNotifications,
         hasUnseenNotifications,
         getNotificationCategory,
         isNotificationExpired,
