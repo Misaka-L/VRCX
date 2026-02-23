@@ -28,6 +28,7 @@ import { database, dbVars } from '../service/database';
 import { AppDebug } from '../service/appConfig';
 import { useAdvancedSettingsStore } from './settings/advanced';
 import { useAppearanceSettingsStore } from './settings/appearance';
+import { useConnectProtocolStore } from './connect-protocol';
 import { useFavoriteStore } from './favorite';
 import { useFriendStore } from './friend';
 import { useGameStore } from './game';
@@ -60,6 +61,7 @@ export const useNotificationStore = defineStore('Notification', () => {
     const sharedFeedStore = useSharedFeedStore();
     const instanceStore = useInstanceStore();
     const modalStore = useModalStore();
+    const connectProtocolStore = useConnectProtocolStore();
 
     const notificationInitStatus = ref(false);
     const notificationTable = ref({
@@ -1337,7 +1339,7 @@ export const useNotificationStore = defineStore('Notification', () => {
 
     /**
      *
-     * @param {string} noty
+     * @param {object} noty
      * @param {string} message
      * @param {string} imageFile
      */
@@ -1346,6 +1348,8 @@ export const useNotificationStore = defineStore('Notification', () => {
         if (imageFile) {
             image = `file:///${imageFile}`;
         }
+
+        connectProtocolStore.sendNotification(noty, message, imageFile);
         AppApi.ExecuteVrOverlayFunction(
             'playNoty',
             JSON.stringify({ noty, message, image })

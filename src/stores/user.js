@@ -34,6 +34,7 @@ import { database } from '../service/database';
 import { useAppearanceSettingsStore } from './settings/appearance';
 import { useAuthStore } from './auth';
 import { useAvatarStore } from './avatar';
+import { useConnectProtocolStore } from './connect-protocol';
 import { useFavoriteStore } from './favorite';
 import { useFeedStore } from './feed';
 import { useFriendStore } from './friend';
@@ -72,6 +73,7 @@ export const useUserStore = defineStore('User', () => {
     const moderationStore = useModerationStore();
     const photonStore = usePhotonStore();
     const sharedFeedStore = useSharedFeedStore();
+    const connectProtocolStore = useConnectProtocolStore();
     const { t } = useI18n();
 
     const currentUser = ref({
@@ -1702,10 +1704,13 @@ export const useUserStore = defineStore('User', () => {
             userId: data.UserId,
             colour: data.TagColour
         };
+
+        connectProtocolStore.onUserTagUpdated(data.UserId, data.TagColour);
         AppApi.ExecuteVrOverlayFunction(
             'updateHudFeedTag',
             JSON.stringify(feedUpdate)
         );
+
         const ref = cachedUsers.get(data.UserId);
         if (typeof ref !== 'undefined') {
             ref.$customTag = data.Tag;

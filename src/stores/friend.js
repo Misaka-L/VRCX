@@ -22,6 +22,7 @@ import { database } from '../service/database';
 import { reconnectWebSocket } from '../service/websocket';
 import { useAppearanceSettingsStore } from './settings/appearance';
 import { useAuthStore } from './auth';
+import { useConnectProtocolStore } from './connect-protocol';
 import { useFavoriteStore } from './favorite';
 import { useFeedStore } from './feed';
 import { useGeneralSettingsStore } from './settings/general';
@@ -53,6 +54,7 @@ export const useFriendStore = defineStore('Friend', () => {
     const locationStore = useLocationStore();
     const favoriteStore = useFavoriteStore();
     const modalStore = useModalStore();
+    const overlayProtocolStore = useConnectProtocolStore();
     const { t } = useI18n();
 
     const router = useRouter();
@@ -915,6 +917,7 @@ export const useFriendStore = defineStore('Friend', () => {
         const onlineFriendCounts =
             vipFriends.value.length + onlineFriends.value.length;
         if (onlineFriendCounts !== onlineFriendCount.value || forceUpdate) {
+            overlayProtocolStore.onOnlineFriendCountUpdated(onlineFriendCounts);
             AppApi.ExecuteVrOverlayFunction(
                 'updateOnlineFriendCount',
                 `${onlineFriendCounts}`

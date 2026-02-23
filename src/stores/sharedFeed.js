@@ -8,6 +8,7 @@ import {
     getWorldName
 } from '../shared/utils';
 import { database } from '../service/database';
+import { useConnectProtocolStore } from './connect-protocol';
 import { useFriendStore } from './friend';
 import { useInstanceStore } from './instance';
 import { useLocationStore } from './location';
@@ -27,6 +28,7 @@ export const useSharedFeedStore = defineStore('SharedFeed', () => {
     const instanceStore = useInstanceStore();
     const moderationStore = useModerationStore();
     const notificationStore = useNotificationStore();
+    const connectProtocolStore = useConnectProtocolStore();
 
     const onPlayerJoining = ref([]);
 
@@ -404,6 +406,7 @@ export const useSharedFeedStore = defineStore('SharedFeed', () => {
     }
 
     async function sendSharedFeed() {
+        connectProtocolStore.onFeedUpdated(sharedFeedData.value);
         await AppApi.ExecuteVrOverlayFunction(
             'wristFeedUpdate',
             JSON.stringify(sharedFeedData.value)

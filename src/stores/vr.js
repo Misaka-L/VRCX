@@ -4,6 +4,7 @@ import { watch } from 'vue';
 import { isRpcWorld } from '../shared/utils';
 import { useAdvancedSettingsStore } from './settings/advanced';
 import { useAppearanceSettingsStore } from './settings/appearance';
+import { useConnectProtocolStore } from './connect-protocol';
 import { useFriendStore } from './friend';
 import { useGameLogStore } from './gameLog';
 import { useGameStore } from './game';
@@ -27,6 +28,7 @@ export const useVrStore = defineStore('Vr', () => {
     const gameLogStore = useGameLogStore();
     const userStore = useUserStore();
     const sharedFeedStore = useSharedFeedStore();
+    const connectProtocolStore = useConnectProtocolStore();
 
     watch(
         () => watchState.isFriendsLoaded,
@@ -56,11 +58,14 @@ export const useVrStore = defineStore('Vr', () => {
     }
 
     function updateVrNowPlaying() {
+        connectProtocolStore.onMediaUpdated();
         const json = JSON.stringify(gameLogStore.nowPlaying);
         AppApi.ExecuteVrOverlayFunction('nowPlayingUpdate', json);
     }
 
     function updateVRLastLocation() {
+        connectProtocolStore.onLocationUpdated();
+
         let progressPie = false;
         if (advancedSettingsStore.progressPie) {
             progressPie = true;
