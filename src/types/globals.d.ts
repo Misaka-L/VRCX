@@ -23,6 +23,7 @@ declare global {
         LogWatcher: LogWatcher;
         Discord: Discord;
         AssetBundleManager: AssetBundleManager;
+        ConnectProtocol: ConnectProtocol;
         webApiService: webApiService;
         request: any;
         utils: any;
@@ -429,6 +430,10 @@ declare global {
             variantVersion: number
         ): Promise<void>;
         DeleteAllCache: () => Promise<void>;
+    };
+
+    const ConnectProtocol: {
+        SendEventAsync(eventType: string, eventData: string);
     };
 
     const webApiService: {

@@ -14,21 +14,35 @@ export const useConnectProtocolStore = defineStore('ConnectProtocol', () => {
      * @param {?string} tagColor
      */
     function onUserTagUpdated(userId, tagColor) {
-        console.log('ConnectProtocolStore: onUserTagUpdated', userId, tagColor);
+        window.ConnectProtocol.SendEventAsync(
+            'user-tag-updated',
+            JSON.stringify({
+                userId,
+                tagColor
+            })
+        );
     }
 
     /**
      * @param {number} count
      */
     function onOnlineFriendCountUpdated(count) {
-        console.log('ConnectProtocolStore: onOnlineFriendCountUpdated', count);
+        window.ConnectProtocol.SendEventAsync(
+            'online-friend-count-updated',
+            JSON.stringify({
+                newOnlineFriendCount: count
+            })
+        );
     }
 
     /**
      * @param {any[]} feedData
      */
     function onFeedUpdated(feedData) {
-        console.log('ConnectProtocolStore: onFeedUpdated', feedData);
+        window.ConnectProtocol.SendEventAsync(
+            'feed-updated',
+            JSON.stringify(feedData)
+        );
     }
 
     function onLocationUpdated() {
@@ -41,13 +55,24 @@ export const useConnectProtocolStore = defineStore('ConnectProtocol', () => {
             onlineFor: userStore.currentUser.$online_for
         };
 
-        console.log('ConnectProtocolStore: onLocationUpdated', lastLocation);
+        window.ConnectProtocol.SendEventAsync(
+            'location-updated',
+            JSON.stringify(lastLocation)
+        );
     }
 
     function onMediaUpdated() {
-        console.log(
-            'ConnectProtocolStore: onMediaUpdated',
-            gameLogStore.nowPlaying
+        window.ConnectProtocol.SendEventAsync(
+            'in-game-media-status-updated',
+            JSON.stringify({
+                urlOrName: gameLogStore.nowPlaying.url,
+                loadRequestedAt: gameLogStore.nowPlaying.startTime,
+                richMediaSupportedAndPlaying: gameLogStore.nowPlaying.playing,
+                richMediaName: gameLogStore.nowPlaying.name,
+                richMediaLength: gameLogStore.nowPlaying.length,
+                richMediaElapsed: gameLogStore.nowPlaying.elapsed,
+                richMediaThumbnailUrl: gameLogStore.nowPlaying.thumbnailUrl
+            })
         );
     }
 
@@ -57,11 +82,13 @@ export const useConnectProtocolStore = defineStore('ConnectProtocol', () => {
      * @param {string?} pathToLocalImage
      */
     function sendNotification(noty, message, pathToLocalImage) {
-        console.log(
-            'ConnectProtocolStore: sendNotification',
-            noty,
-            message,
-            pathToLocalImage
+        window.ConnectProtocol.SendEventAsync(
+            'internal-noty-notification',
+            JSON.stringify({
+                noty,
+                message,
+                imageLocalPath: pathToLocalImage
+            })
         );
     }
 

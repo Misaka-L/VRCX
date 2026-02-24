@@ -5,7 +5,6 @@ import InteropApi from '../ipc-electron/interopApi.js';
 import configRepository from '../service/config';
 import vrcxJsonStorage from '../service/jsonStorage';
 
-
 export async function initInteropApi(isVrOverlay = false) {
     if (isVrOverlay) {
         if (WINDOWS) {
@@ -26,7 +25,8 @@ export async function initInteropApi(isVrOverlay = false) {
                 'SQLite',
                 'LogWatcher',
                 'Discord',
-                'AssetBundleManager'
+                'AssetBundleManager',
+                'ConnectProtocol'
             );
         } else if (LINUX) {
             window.AppApi = InteropApi.AppApiElectron;
@@ -45,7 +45,7 @@ export async function initInteropApi(isVrOverlay = false) {
             window.LogWatcher = CoreIpcApi.LogWatcher;
             window.Discord = CoreIpcApi.Discord;
             window.AssetBundleManager = CoreIpcApi.AssetBundleManager;
-            window.AppApiVrElectron = CoreIpcApi.AppApiVrElectron;
+            window.ConnectProtocol = CoreIpcApi.ConnectProtocol;
         }
 
         await configRepository.init();

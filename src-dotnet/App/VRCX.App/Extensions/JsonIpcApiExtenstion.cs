@@ -25,5 +25,7 @@ public static class JsonIpcApiExtenstion
             serviceProvider.GetRequiredService<Discord>(), typeof(Discord));
         jsonIpcService.RegisterJsonIpcObject("AssetBundleManager",
             serviceProvider.GetRequiredService<AssetBundleManager>(), typeof(AssetBundleManager));
+        jsonIpcService.RegisterJsonIpcObject("ConnectProtocol",
+            serviceProvider.GetRequiredService<ConnectProtocol>(), typeof(ConnectProtocol));
     }
 }

@@ -12,6 +12,14 @@ For details about SSE in VRCX Connect, see [SSE README](README.md).
 > DO NOT use any field didn't show up in this document.
 > We are not Windows, we won't promise compatibility.
 
+## `hello`
+
+A empty json object send when SSE connection established.
+
+```json
+{}
+```
+
 ## `user-tag-update`
 
 | Field      | Type      | Description      | Example                                    |
@@ -38,7 +46,7 @@ For details about SSE in VRCX Connect, see [SSE README](README.md).
 }
 ```
 
-## `notification`
+## `internal-noty-notification`
 
 | Field            | Type      | Description                              | Example                       |
 | ---------------- | --------- | ---------------------------------------- | ----------------------------- |
@@ -55,6 +63,9 @@ For details about SSE in VRCX Connect, see [SSE README](README.md).
 ```
 
 ### `noty` Example
+
+> [!CAUTION]
+> `noty` object are internal implementation of VRCX. It's a rabbit hole that nobody figure out how it works.
 
 ```json
 {
@@ -76,21 +87,20 @@ For details about SSE in VRCX Connect, see [SSE README](README.md).
 ## `in-game-media-status-updated`
 
 > [!IMPORTANT]
-> Only [PyPyDance](https://vrchat.com/home/world/wrld_f20326da-f1ac-45fc-a062-609723b097b1/info) support Rich Media Status
+> Only [PyPyDance](https://vrchat.com/home/world/wrld_f20326da-f1ac-45fc-a062-609723b097b1) and [Popcorn Palace](https://vrchat.com/home/world/wrld_266523e8-9161-40da-acd0-6bd82e075833) support Rich Media Status
 
 > [!CAUTION]
 > DO NOT use any rich media status information when `rich-media-supported-and-playing` is `false`.
 
-| Field                          | Type      | Description                                                                                     | Example                                       |
-| ------------------------------ | --------- | ----------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| `url`                          | `string?` | Url to media playing, can be any url supported by VRChat (e.g Youtube, Url to mp4)              | `https://www.youtube.com/watch?v=qnPGGqqGK3o` |
-| `loadRequestedAt`              | `float?`  | Unix timestamp in seconds float                                                                 | `1771688566.942379`                           |
-| `richMediaSupportedAndPlaying` | `bool`    | Is rich media supported and playing, see "Important" information above.                         | `true`                                        |
-| `richMediaName`                | `string?` | Name of the media playing. (e.g In PyPyDance, it can be "Song name (Player who play the song)") | `Le Freak (RandomPlayer)`                     |
-| `richMediaLength`              | `int?`    | Media length in seconds                                                                         | `297`                                         |
-| `richMediaPositionPercentage`  | `float?`  | `(richMediaLength - richMediaElapsed) / richMediaLength`                                        | `0.99`                                        |
-| `richMediaElapsed`             | `int?`    | Elapsed time of media in seconds                                                                | `2`                                           |
-| `richMediaRemainingText`       | `string?` | Format text of media player remaining time                                                      | `04:26`                                       |
+| Field                          | Type      | Description                                                                                         | Example                                                                                                   |
+| ------------------------------ | --------- | --------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| `urlOrName`                    | `string?` | Url to media playing or name of media, can be any url supported by VRChat (e.g Youtube, Url to mp4) | `https://www.youtube.com/watch?v=qnPGGqqGK3o` or `We Were Algorithms Once - Upload Labs Soundtrack (OST)` |
+| `loadRequestedAt`              | `float?`  | Unix timestamp in seconds float                                                                     | `1771688566.942379`                                                                                       |
+| `richMediaSupportedAndPlaying` | `bool`    | Is rich media supported and playing, see "Important" information above.                             | `true`                                                                                                    |
+| `richMediaName`                | `string?` | Name of the media playing. (e.g In PyPyDance, it can be "Song name (Player who play the song)")     | `Le Freak (RandomPlayer)`                                                                                 |
+| `richMediaLength`              | `float?`  | Media length in seconds                                                                             | `297`                                                                                                     |
+| `richMediaElapsed`             | `float?`  | Elapsed time of media in seconds                                                                    | `2`                                                                                                       |
+| `richMediaThumbnailUrl`        | `string?` | Url of thumbnailUrl                                                                                 | N/A                                                                                                       |
 
 ```json
 {
@@ -99,9 +109,7 @@ For details about SSE in VRCX Connect, see [SSE README](README.md).
     "richMediaSupportedAndPlaying": true,
     "richMediaName": "Le Freak (RandomPlayer)",
     "richMediaLength": 297,
-    "richMediaPositionPercentage": 0.99,
-    "richMediaElapsed": 2,
-    "richMediaRemainingText": "04:26"
+    "richMediaElapsed": 2
 }
 ```
 

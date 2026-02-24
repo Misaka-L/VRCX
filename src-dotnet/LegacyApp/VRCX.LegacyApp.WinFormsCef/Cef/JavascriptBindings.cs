@@ -22,6 +22,7 @@ namespace VRCX.LegacyApp.WinFormsCef.Cef
             repository.Register("LogWatcher", provider.GetRequiredService<LogWatcher>());
             repository.Register("Discord", provider.GetRequiredService<Discord>());
             repository.Register("AssetBundleManager", provider.GetRequiredService<AssetBundleManager>());
+            repository.Register("ConnectProtocol", provider.GetRequiredService<ConnectProtocol>());
         }
     }
 }

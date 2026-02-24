@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using VRCX.Core.ConnectProtocol.Services;
 using VRCX.Core.Extensions;
 using VRCX.Core.OverlayClient.OvrToolkit.Services;
 using VRCX.Core.OverlayClient.XsOverlay.Services;
@@ -22,7 +23,8 @@ public sealed class CoreLifetimeService(
     AppWebProxy appWbProxy,
     XsOverlayClientService xsOverlayClientService,
     OvrToolkitClientService ovrToolkitClientService,
-    IPlatformCoreLifetimeService platformCoreLifetimeService
+    IPlatformCoreLifetimeService platformCoreLifetimeService,
+    ConnectProtocolHttpService connectProtocolHttpService
 )
 {
     private readonly ILogger _logger = Log.ForContext<CoreLifetimeService>();
@@ -86,6 +88,7 @@ public sealed class CoreLifetimeService(
         await ipcServerService.StartAsync();
         await xsOverlayClientService.StartAsync();
         await ovrToolkitClientService.StartAsync();
+        await connectProtocolHttpService.StartAsync();
     }
 
     public async Task StopAsync()
@@ -96,6 +99,7 @@ public sealed class CoreLifetimeService(
         appStorageService.Save();
         webApiService.SaveCookies();
 
+        await connectProtocolHttpService.StopAsync();
         await overlayWebSocketService.StopAsync();
         await ipcServerService.StopAsync();
         await xsOverlayClientService.StopAsync();

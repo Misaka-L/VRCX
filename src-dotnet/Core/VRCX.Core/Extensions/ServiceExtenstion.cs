@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using VRCX.Core.AppApi;
+using VRCX.Core.ConnectProtocol.Extensions;
 using VRCX.Core.OverlayClient.OvrToolkit.Extensions;
 using VRCX.Core.OverlayClient.XsOverlay.Extensions;
 using VRCX.Core.ScreenshotManagement.Extensions;
@@ -17,6 +18,8 @@ public static class ServiceExtenstion
     {
         public IServiceCollection AddCoreServices()
         {
+            services.AddConnectProtocol();
+
             services.AddScreenshotManagement();
             services.AddWebLocalFileAccess();
 
@@ -54,6 +57,7 @@ public static class ServiceExtenstion
             services.AddSingleton<WebViewInterop.SQLite>();
             services.AddSingleton<WebViewInterop.VRCXStorage>();
             services.AddSingleton<WebViewInterop.WebApi>();
+            services.AddSingleton<WebViewInterop.ConnectProtocol>();
 
             return services;
         }
