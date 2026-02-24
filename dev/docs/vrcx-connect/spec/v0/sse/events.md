@@ -20,20 +20,6 @@ A empty json object send when SSE connection established.
 {}
 ```
 
-## `user-tag-update`
-
-| Field      | Type      | Description      | Example                                    |
-| ---------- | --------- | ---------------- | ------------------------------------------ |
-| `userId`   | `string`  | VRChat User Id   | `usr_c6806bef-b885-427d-acaf-e24a66acb829` |
-| `tagColor` | `string?` | Tag Color in Hex | `#ffffff`                                  |
-
-```json
-{
-    "userId": "usr_c6806bef-b885-427d-acaf-e24a66acb829",
-    "tagColor": "#ffffff"
-}
-```
-
 ## `online-friend-count-updated`
 
 | Field                  | Type  | Description                       | Example |

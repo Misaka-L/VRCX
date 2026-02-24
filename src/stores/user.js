@@ -73,7 +73,6 @@ export const useUserStore = defineStore('User', () => {
     const moderationStore = useModerationStore();
     const photonStore = usePhotonStore();
     const sharedFeedStore = useSharedFeedStore();
-    const connectProtocolStore = useConnectProtocolStore();
     const { t } = useI18n();
 
     const currentUser = ref({
@@ -1709,7 +1708,6 @@ export const useUserStore = defineStore('User', () => {
             colour: data.TagColour
         };
 
-        connectProtocolStore.onUserTagUpdated(data.UserId, data.TagColour);
         AppApi.ExecuteVrOverlayFunction(
             'updateHudFeedTag',
             JSON.stringify(feedUpdate)

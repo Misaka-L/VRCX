@@ -10,20 +10,6 @@ export const useConnectProtocolStore = defineStore('ConnectProtocol', () => {
     const userStore = useUserStore();
 
     /**
-     * @param {string} userId
-     * @param {?string} tagColor
-     */
-    function onUserTagUpdated(userId, tagColor) {
-        window.ConnectProtocol.SendEventAsync(
-            'user-tag-updated',
-            JSON.stringify({
-                userId,
-                tagColor
-            })
-        );
-    }
-
-    /**
      * @param {number} count
      */
     function onOnlineFriendCountUpdated(count) {
@@ -93,7 +79,6 @@ export const useConnectProtocolStore = defineStore('ConnectProtocol', () => {
     }
 
     return {
-        onUserTagUpdated,
         onOnlineFriendCountUpdated,
         onFeedUpdated,
         onMediaUpdated,
