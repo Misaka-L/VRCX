@@ -17,6 +17,7 @@ import { useGalleryStore } from './gallery';
 import { useGameLogStore } from './gameLog';
 import { useGameStore } from './game';
 import { useGeneralSettingsStore } from './settings/general';
+import { useGlobalSearchStore } from './globalSearch';
 import { useGroupStore } from './group';
 import { useInstanceStore } from './instance';
 import { useInviteStore } from './invite';
@@ -165,7 +166,8 @@ export function createGlobalStores() {
         vrcStatus: useVrcStatusStore(),
         charts: useChartsStore(),
         modal: useModalStore(),
-        connectProtocol: useConnectProtocolStore()
+        connectProtocol: useConnectProtocolStore(),
+        globalSearch: useGlobalSearchStore()
     };
 }
 
@@ -205,5 +207,6 @@ export {
     useUpdateLoopStore,
     useVrcStatusStore,
     useModalStore,
-    useConnectProtocolStore
+    useConnectProtocolStore,
+    useGlobalSearchStore
 };
