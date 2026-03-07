@@ -481,6 +481,20 @@ export const useNotificationStore = defineStore('Notification', () => {
 
     /**
      *
+     */
+    function markAllAsSeen() {
+        const unseenIds = [...unseenNotifications.value];
+        for (const id of unseenIds) {
+            const ref = notificationTable.value.data.find((n) => n.id === id);
+            const version = ref?.version || 1;
+            queueMarkAsSeen(id, version);
+        }
+        unseenNotifications.value = [];
+        uiStore.removeNotify('notification');
+    }
+
+    /**
+     *
      * @param args
      */
     function handleNotificationAccept(args) {
@@ -1460,6 +1474,7 @@ export const useNotificationStore = defineStore('Notification', () => {
         getNotificationCategory,
         isNotificationExpired,
         openNotificationLink,
-        queueMarkAsSeen
+        queueMarkAsSeen,
+        markAllAsSeen
     };
 });
