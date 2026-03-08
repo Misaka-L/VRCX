@@ -1977,6 +1977,13 @@ export const useUserStore = defineStore('User', () => {
     }
 
     /**
+     * @param {string} value
+     */
+    function setUserDialogMemo(value) {
+        userDialog.value.memo = value;
+    }
+
+    /**
      *
      */
     function toggleSharedConnectionsOptOut() {
@@ -2021,6 +2028,7 @@ export const useUserStore = defineStore('User', () => {
         getCurrentUser,
         handleConfig,
         showSendBoopDialog,
+        setUserDialogMemo,
         checkNote,
         toggleSharedConnectionsOptOut,
         toggleDiscordFriendsOptOut
