@@ -401,6 +401,17 @@ export const useNotificationStore = defineStore('Notification', () => {
     }
 
     /**
+     * @param {boolean} value
+     */
+    function setNotificationInitStatus(value) {
+        notificationInitStatus.value = value;
+    }
+
+    function clearUnseenNotifications() {
+        unseenNotifications.value = [];
+    }
+
+    /**
      *
      * @param notificationId
      */
@@ -1483,6 +1494,8 @@ export const useNotificationStore = defineStore('Notification', () => {
         openNotificationLink,
         queueMarkAsSeen,
         markAllAsSeen,
-        appendNotificationTableEntry
+        appendNotificationTableEntry,
+        setNotificationInitStatus,
+        clearUnseenNotifications
     };
 });
