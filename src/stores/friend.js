@@ -232,7 +232,7 @@ export const useFriendStore = defineStore('Friend', () => {
             state.friendNumber = 0;
             friendLog.clear();
             friendLogTable.value.data = [];
-            groupStore.groupInstances = [];
+            groupStore.clearGroupInstances();
             onlineFriendCount.value = 0;
             pendingOfflineMap.clear();
             if (isLoggedIn) {
@@ -275,7 +275,7 @@ export const useFriendStore = defineStore('Friend', () => {
 
         if (appearanceSettingsStore.randomUserColours) {
             getNameColour(userStore.currentUser.id).then((colour) => {
-                userStore.currentUser.$userColour = colour;
+                userStore.setCurrentUserColour(colour);
             });
         }
     }
@@ -1687,6 +1687,13 @@ export const useFriendStore = defineStore('Friend', () => {
         }
     }
 
+    /**
+     * @param {boolean} value
+     */
+    function setRefreshFriendsLoading(value) {
+        isRefreshFriendsLoading.value = value;
+    }
+
     return {
         state,
 
@@ -1728,6 +1735,7 @@ export const useFriendStore = defineStore('Friend', () => {
         updateUserCurrentStatus,
         handleFriendAdd,
         handleFriendDelete,
-        initFriendLogHistoryTable
+        initFriendLogHistoryTable,
+        setRefreshFriendsLoading
     };
 });
