@@ -869,8 +869,8 @@ export const useUserStore = defineStore('User', () => {
                                 }
                             });
                     }
-                    groupRequest
-                        .getRepresentedGroup({ userId })
+                    queryRequest
+                        .fetch('representedGroup', { userId })
                         .then((args1) => {
                             groupStore.handleGroupRepresented(args1);
                         });
