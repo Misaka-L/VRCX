@@ -2,7 +2,7 @@ import { computed, reactive, ref, watch } from 'vue';
 import { defineStore } from 'pinia';
 import { useRouter } from 'vue-router';
 
-import { i18n } from '../plugin/i18n';
+import { i18n } from '../plugins/i18n';
 import {
     compareByCreatedAtAscending,
     createRateLimiter,
@@ -25,8 +25,8 @@ import {
     runUpdateFriendshipsFlow
 } from '../coordinators/friendRelationshipCoordinator';
 import { applyUser } from '../coordinators/userCoordinator';
-import { AppDebug } from '../service/appConfig';
-import { database } from '../service/database';
+import { AppDebug } from '../services/appConfig';
+import { database } from '../services/database';
 import { useAppearanceSettingsStore } from './settings/appearance';
 import { useConnectProtocolStore } from './connect-protocol';
 import { useFavoriteStore } from './favorite';
@@ -34,9 +34,9 @@ import { useGeneralSettingsStore } from './settings/general';
 import { useGroupStore } from './group';
 import { useLocationStore } from './location';
 import { useUserStore } from './user';
-import { watchState } from '../service/watchState';
+import { watchState } from '../services/watchState';
 
-import configRepository from '../service/config';
+import configRepository from '../services/config';
 
 import * as workerTimers from 'worker-timers';
 
