@@ -348,7 +348,11 @@ export const useNotificationStore = defineStore('Notification', () => {
                 }
             }
         }
-        if (!checkCanInvite(currentLocation)) {
+        if (!checkCanInvite(currentLocation, {
+            currentUserId: userStore.currentUser.id,
+            lastLocationStr: locationStore.lastLocation.location,
+            cachedInstances: instanceStore.cachedInstances
+        })) {
             return;
         }
 
