@@ -8,12 +8,11 @@ import {
     compareByLocationAt,
     compareByName,
     compareByUpdatedAt,
-    getAllUserMemos,
-    getUserMemo,
     isRealInstance,
     parseLocation,
     replaceBioSymbols
 } from '../shared/utils';
+import { getAllUserMemos, getUserMemo } from '../coordinators/memoCoordinator';
 import { instanceRequest, userRequest } from '../api';
 import { AppDebug } from '../services/appConfig';
 import { database } from '../services/database';

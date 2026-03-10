@@ -8,9 +8,9 @@ import {
     createRateLimiter,
     executeWithBackoff,
     getFriendsSortFunction,
-    getUserMemo,
     isRealInstance
 } from '../shared/utils';
+import { getUserMemo } from '../coordinators/memoCoordinator';
 import { friendRequest, userRequest } from '../api';
 import {
     runInitFriendsListFlow,
