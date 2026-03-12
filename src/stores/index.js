@@ -9,6 +9,7 @@ import { useAvatarProviderStore } from './avatarProvider';
 import { useAvatarStore } from './avatar';
 import { useChartsStore } from './charts';
 import { useConnectProtocolStore } from './connect-protocol';
+import { useDashboardStore } from './dashboard';
 import { useDiscordPresenceSettingsStore } from './settings/discordPresence';
 import { useFavoriteStore } from './favorite';
 import { useFeedStore } from './feed';
@@ -165,6 +166,7 @@ export function createGlobalStores() {
         auth: useAuthStore(),
         vrcStatus: useVrcStatusStore(),
         charts: useChartsStore(),
+        dashboard: useDashboardStore(),
         modal: useModalStore(),
         connectProtocol: useConnectProtocolStore(),
         globalSearch: useGlobalSearchStore()
@@ -191,6 +193,7 @@ export {
     usePhotonStore,
     useSearchStore,
     useChartsStore,
+    useDashboardStore,
     useAdvancedSettingsStore,
     useAppearanceSettingsStore,
     useDiscordPresenceSettingsStore,
