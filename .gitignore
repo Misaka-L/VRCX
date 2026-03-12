@@ -12,3 +12,6 @@ bun.lock
 .env.sentry-build-plugin
 
 bin/
+AGENTS.md
+AI_GUIDE.md
+CLAUDE.md
