@@ -162,7 +162,8 @@
 <script setup>
     import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
     import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from '@/components/ui/carousel';
-    import { onBeforeUnmount, onMounted, reactive, ref } from 'vue';
+    import { useEventListener } from '@vueuse/core';
+    import { onMounted, reactive, ref } from 'vue';
     import { useGalleryStore, useUserStore, useVrcxStore } from '@/stores';
     import { ArrowLeft } from 'lucide-vue-next';
     import { Badge } from '@/components/ui/badge';
@@ -212,11 +213,6 @@
         if (!screenshotMetadataDialog.metadata.filePath) {
             getAndDisplayLastScreenshot();
         }
-        window.addEventListener('keyup', handleComponentKeyup);
-    });
-
-    onBeforeUnmount(() => {
-        window.removeEventListener('keyup', handleComponentKeyup);
     });
 
     const handleComponentKeyup = (event) => {
@@ -233,6 +229,9 @@
             screenshotMetadataCarouselChange(carouselNavigation);
         }
     };
+
+    useEventListener(window, 'keyup', handleComponentKeyup);
+
 
     /**
      *
