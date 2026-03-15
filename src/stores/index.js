@@ -32,6 +32,7 @@ import { usePhotonStore } from './photon';
 import { useSearchStore } from './search';
 import { useSharedFeedStore } from './sharedFeed';
 import { useUiStore } from './ui';
+import { useToolsStore } from './tools';
 import { useUpdateLoopStore } from './updateLoop';
 import { useUserStore } from './user';
 import { useVRCXUpdaterStore } from './vrcxUpdater';
@@ -155,6 +156,7 @@ export function createGlobalStores() {
         notification: useNotificationStore(),
         feed: useFeedStore(),
         ui: useUiStore(),
+        tools: useToolsStore(),
         gameLog: useGameLogStore(),
         search: useSearchStore(),
         game: useGameStore(),
@@ -200,6 +202,7 @@ export {
     useGeneralSettingsStore,
     useNotificationsSettingsStore,
     useWristOverlaySettingsStore,
+    useToolsStore,
     useUiStore,
     useUserStore,
     useVrStore,
