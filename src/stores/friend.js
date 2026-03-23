@@ -60,6 +60,8 @@ export const useFriendStore = defineStore('Friend', () => {
     const sortedFriends = shallowRef([]);
     let sortedFriendsBatchDepth = 0;
     let pendingSortedFriendsRebuild = false;
+    let allUserStatsRequestId = 0;
+    let allUserMutualCountRequestId = 0;
 
     const derivedDebugCounters = reactive({
         allFavoriteFriendIds: 0,
@@ -822,8 +824,16 @@ export const useFriendStore = defineStore('Friend', () => {
                 displayNames.push(ctx.ref.displayName);
             }
         }
+        if (!userIds.length) {
+            return;
+        }
+
+        const requestId = ++allUserStatsRequestId;
 
         const data = await database.getAllUserStats(userIds, displayNames);
+        if (requestId !== allUserStatsRequestId) {
+            return;
+        }
 
         const dataByDisplayName = new Map();
         const friendsByDisplayName = new Map();
@@ -887,7 +897,14 @@ export const useFriendStore = defineStore('Friend', () => {
      *
      */
     async function getAllUserMutualCount() {
+        if (!friends.size) {
+            return;
+        }
+        const requestId = ++allUserMutualCountRequestId;
         const mutualCountMap = await database.getMutualCountForAllUsers();
+        if (requestId !== allUserMutualCountRequestId) {
+            return;
+        }
         runInSortedFriendsBatch(() => {
             for (const [userId, mutualCount] of mutualCountMap.entries()) {
                 const ref = friends.get(userId);
