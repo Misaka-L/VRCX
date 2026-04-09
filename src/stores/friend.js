@@ -44,6 +44,7 @@ export const useFriendStore = defineStore('Friend', () => {
     const userStore = useUserStore();
     const groupStore = useGroupStore();
     const locationStore = useLocationStore();
+    const overlayProtocolStore = useConnectProtocolStore();
 
     const router = useRouter();
     const t = i18n.global.t;
